@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+    <title>Recruiter Sign Up</title>
+</head>
+<body>
+    <!-- Custom cursor -->
+    <div class="custom-cursor"></div>
+    
+    <!-- Floating animation elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
+    <div class="container">
+        <h1 class="animated-title">Recruiter Sign Up</h1>
+        <form method="POST" action="/recruiter-signup" enctype="multipart/form-data">
+            <input type="text" name="firstName" placeholder="Firstname" required>
+            <input type="text" name="lastName" placeholder="Lastname" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="businessPancard" placeholder="Business PAN Card Number" required>
+            <input type="text" name="companyName" placeholder="Company Name" required>
+            <textarea name="companyAddress" placeholder="Company Address" rows="3" required></textarea>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+            <button type="submit" class="animated-submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('recruiter_login') }}">Login</a></p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='signup.js') }}"></script>
+</body>
+</html>

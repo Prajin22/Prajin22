@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+    <title>Sign Up</title>
+</head>
+<body>
+    <!-- Custom cursor -->
+    <div class="custom-cursor"></div>
+    
+    <!-- Floating animation elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
+    <div class="container">
+        <h1 class="animated-title">Sign Up</h1>
+        <form id="signupForm" method="POST" action="/signup" enctype="multipart/form-data">
+            <!-- Personal Details Section -->
+            <fieldset>
+                <legend>Personal Details</legend>
+                <input type="text" id="firstName" name="firstName" placeholder="Firstname" required>
+                <input type="text" id="lastName" name="lastName" placeholder="Lastname" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="tel" id="phone" name="phone" placeholder="Phone" required>
+                <select id="gender" name="gender" required aria-label="Select your gender">
+                    <option value="" disabled selected>Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="number" id="age" name="age" placeholder="Age" min="18" required>
+            </fieldset>
+
+            <!-- Business Details Section -->
+            <fieldset id="panVerification">
+                <legend>Business Details (For Recruiters)</legend>
+                <input type="text" id="businessPancard" name="businessPancard" placeholder="Business PAN Card Number">
+                <button type="button" id="verifyPanButton" class="verify-btn">Verify PAN</button>
+                <p id="verificationStatus" class="hidden"></p>
+                <label for="livePicture">Live Picture (Upload):</label>
+                <input type="file" id="livePicture" name="livePicture" accept="image/*">
+                <input type="text" id="companyName" name="companyName" placeholder="Company Name">
+                <textarea id="companyAddress" name="companyAddress" placeholder="Company Address" rows="3"></textarea>
+            </fieldset>
+
+            <!-- Employment Preferences Section -->
+            <fieldset>
+                <legend>Employment Preferences</legend>
+                <input type="text" id="employeeTypes" name="employeeTypes" placeholder="Employee Types (e.g., Full-time, Part-time)">
+                <input type="text" id="fieldOfInterest" name="fieldOfInterest" placeholder="Field of Interest">
+                <input type="number" id="maxSalary" name="maxSalary" placeholder="Maximum Beginning Salary (₹)" min="0">
+                <input type="text" id="fieldOfEmployeesNeed" name="fieldOfEmployeesNeed" placeholder="Field of Employees Needed">
+            </fieldset>
+
+            <!-- Account Security Section -->
+            <fieldset>
+                <legend>Account Security</legend>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+            </fieldset>
+
+            <!-- Submit Button -->
+            <button type="submit" class="animated-submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    </div>
+
+    <!-- External JS Libraries and Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='signup.js') }}"></script>
+</body>
+</html>

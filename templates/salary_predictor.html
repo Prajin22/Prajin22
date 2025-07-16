@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Salary Predictor - Zeus Jobs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='salary_predictor.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">Zeus Jobs</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="predictor-container">
+        <div class="predictor-header">
+            <h1><i class="fas fa-chart-line"></i> AI Salary Predictor</h1>
+            <p>Use machine learning to predict competitive salary ranges for your job postings</p>
+        </div>
+
+        <div class="predictor-content">
+            <div class="predictor-form-card">
+                <h3><i class="fas fa-calculator"></i> Job Details</h3>
+                <form method="POST" class="predictor-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="job_type">Job Type</label>
+                            <select id="job_type" name="job_type" required>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Internship">Internship</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" placeholder="e.g., Bangalore, Remote" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Job Description</label>
+                        <textarea id="description" name="description" rows="4" 
+                                  placeholder="Describe the role, responsibilities, and requirements..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requirements">Requirements</label>
+                        <textarea id="requirements" name="requirements" rows="3" 
+                                  placeholder="List specific requirements and qualifications..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="skills">Required Skills (comma-separated)</label>
+                        <input type="text" id="skills" name="skills" 
+                               placeholder="e.g., Python, React, AWS, Machine Learning">
+                    </div>
+
+                    <button type="submit" class="btn-predict">
+                        <i class="fas fa-magic"></i> Predict Salary
+                    </button>
+                </form>
+            </div>
+
+            {% if predicted_salary %}
+            <div class="prediction-result-card">
+                <h3><i class="fas fa-lightbulb"></i> AI Prediction</h3>
+                <div class="prediction-display">
+                    <div class="salary-range">
+                        <span class="currency">₹</span>
+                        <span class="amount">{{ "{:,}".format(predicted_salary) }}</span>
+                        <span class="period">/year</span>
+                    </div>
+                    <p class="prediction-note">Based on market analysis and similar job postings</p>
+                </div>
+                
+                <div class="prediction-details">
+                    <h4>Salary Range Suggestions:</h4>
+                    <div class="range-suggestions">
+                        <div class="range-item">
+                            <span class="range-label">Minimum:</span>
+                            <span class="range-value">₹{{ "{:,}".format(predicted_salary - 100000) }}</span>
+                        </div>
+                        <div class="range-item">
+                            <span class="range-label">Recommended:</span>
+                            <span class="range-value">₹{{ "{:,}".format(predicted_salary) }}</span>
+                        </div>
+                        <div class="range-item">
+                            <span class="range-label">Maximum:</span>
+                            <span class="range-value">₹{{ "{:,}".format(predicted_salary + 200000) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- AI Features Info -->
+        <div class="ai-features">
+            <h3><i class="fas fa-brain"></i> How Our AI Predicts Salaries</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-database"></i>
+                    <h4>Market Data Analysis</h4>
+                    <p>Analyzes thousands of job postings to understand market trends</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h4>Skill-Based Pricing</h4>
+                    <p>Considers required skills and their market value</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h4>Location Factors</h4>
+                    <p>Adjusts for cost of living and regional salary differences</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-clock"></i>
+                    <h4>Experience Level</h4>
+                    <p>Evaluates job complexity and experience requirements</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // GSAP animations
+        gsap.from(".predictor-header", {
+            duration: 1,
+            y: -50,
+            opacity: 0,
+            ease: "power2.out"
+        });
+
+        gsap.from(".predictor-form-card", {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            delay: 0.2,
+            ease: "power2.out"
+        });
+
+        {% if predicted_salary %}
+        gsap.from(".prediction-result-card", {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            delay: 0.4,
+            ease: "power2.out"
+        });
+        {% endif %}
+
+        gsap.from(".feature-card", {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            stagger: 0.1,
+            delay: 0.6,
+            ease: "power2.out"
+        });
+    </script>
+</body>
+</html> 

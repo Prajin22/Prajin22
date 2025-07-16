@@ -1,0 +1,290 @@
+/* Body and Background Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Flexbox for alignment */
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    height: 100vh; /* Full height of the viewport */
+    overflow: hidden;
+    background: linear-gradient(to bottom right, #1a2a6c, #b21f1f, #fdbb2d); /* Gradient background */
+    cursor: none; /* Hide default cursor for better interaction */
+}
+
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), transparent 60%);
+    animation: glow 5s infinite alternate; /* Subtle glowing effect */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Floating Animation Elements */
+.floating-element {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 0;
+}
+
+.floating-element:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation: float1 8s ease-in-out infinite;
+}
+
+.floating-element:nth-child(2) {
+    width: 60px;
+    height: 60px;
+    top: 60%;
+    right: 15%;
+    animation: float2 6s ease-in-out infinite;
+}
+
+.floating-element:nth-child(3) {
+    width: 100px;
+    height: 100px;
+    bottom: 20%;
+    left: 20%;
+    animation: float3 10s ease-in-out infinite;
+}
+
+.floating-element:nth-child(4) {
+    width: 40px;
+    height: 40px;
+    top: 30%;
+    right: 30%;
+    animation: float4 7s ease-in-out infinite;
+}
+
+.floating-element:nth-child(5) {
+    width: 70px;
+    height: 70px;
+    bottom: 40%;
+    right: 10%;
+    animation: float5 9s ease-in-out infinite;
+}
+
+/* Floating Animations */
+@keyframes float1 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+@keyframes float2 {
+    0%, 100% { transform: translateX(0px) scale(1); }
+    50% { transform: translateX(15px) scale(1.1); }
+}
+
+@keyframes float3 {
+    0%, 100% { transform: translateY(0px) translateX(0px); }
+    50% { transform: translateY(-15px) translateX(10px); }
+}
+
+@keyframes float4 {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(90deg) scale(0.8); }
+}
+
+@keyframes float5 {
+    0%, 100% { transform: translateX(0px) rotate(0deg); }
+    50% { transform: translateX(-20px) rotate(90deg); }
+}
+
+/* Interactive hover effects */
+.floating-element:hover {
+    transform: scale(1.2) !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Glow Effect Animation */
+@keyframes glow {
+    0% {
+        background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), transparent 60%);
+    }
+    100% {
+        background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2), transparent 60%);
+    }
+}
+
+/* Login Container */
+.container {
+    background-color: rgba(255, 255, 255, 1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+    margin: 40px auto;
+    z-index: 10;
+    position: relative;
+    height: auto;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #1a73e8;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(26, 115, 232, 0.5);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    0% { text-shadow: 2px 2px 5px rgba(26, 115, 232, 0.5); }
+    100% { text-shadow: 2px 2px 15px rgba(26, 115, 232, 0.8); }
+}
+
+input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 12px 0 0 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: #fff;
+    color: #000;
+    box-shadow: none;
+    transition: border 0.3s;
+    display: block;
+    outline: none;
+    font-weight: 500;
+    box-sizing: border-box;
+    position: static;
+    float: none;
+    opacity: 1;
+}
+
+input:first-child {
+    margin-top: 0;
+}
+
+input:focus {
+    background-color: #fff !important;
+    border-color: #1a73e8 !important;
+    color: #000 !important;
+    box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3);
+    transform: scale(1.02);
+}
+
+button {
+    width: 100%;
+    margin: 24px 0 0 0;
+    padding: 12px;
+    background: linear-gradient(45deg, #1a73e8, #4285f4) !important;
+    color: #fff !important;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: block;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(26, 115, 232, 0.2);
+}
+
+button:focus {
+    outline: 2px solid #1a73e8;
+}
+
+.animated-submit {
+    opacity: 1 !important;
+    background: linear-gradient(45deg, #1a73e8, #4285f4) !important;
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(26, 115, 232, 0.2);
+}
+
+.container form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0;
+    background: rgba(255,255,0,0.05); /* Debug background, remove after testing */
+}
+
+a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #4285f4;
+    text-shadow: 0 0 5px rgba(66, 133, 244, 0.5);
+}
+
+/* Custom cursor */
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease;
+}
+
+.custom-cursor.hover {
+    transform: scale(2);
+    background: rgba(255, 255, 255, 1);
+}
+
+input[type="password"]:disabled,
+input[type="password"][readonly] {
+    opacity: 1 !important;
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
+
+input[type="password"] {
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #000;
+    width: 100%;
+    margin: 12px 0 0 0;
+    display: block;
+    position: static;
+    float: none;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    z-index: 1;
+    opacity: 1;
+}
+
+@media (max-width: 400px) {
+    .container {
+        width: 90%;
+    }
+    
+    .floating-element {
+        display: none; /* Hide on mobile for better performance */
+    }
+}

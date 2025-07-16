@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <title>Home - Zeus Jobs</title>
+  <style>
+    .dashboard-container {
+      max-width: 600px;
+      margin: 60px auto 0 auto;
+      background: rgba(255,255,255,0.98);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      padding: 40px 30px 32px 30px;
+      text-align: center;
+    }
+    .dashboard-title {
+      font-size:2rem;
+      color:#0073b1;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .dashboard-links {
+      margin: 24px 0 0 0;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .dashboard-link {
+      background: #0073b1;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .dashboard-link:hover {
+      background: #005f8d;
+    }
+    .user-info {
+      margin: 30px 0 0 0;
+      text-align: left;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 18px 24px;
+      color: #222;
+    }
+    .user-info strong {
+      color: #0073b1;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-title">Welcome, {{ user.first_name }}!</div>
+    <div style="color:#444; margin-bottom: 18px;">
+      You are logged in as <strong>{{ 'Job Seeker' if user_type == 'jobSeeker' else 'Recruiter' }}</strong>.
+    </div>
+    <div class="dashboard-links">
+      <a class="dashboard-link" href="{{ url_for('profile') }}">Profile</a>
+      <a class="dashboard-link" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <div class="user-info">
+      {% if user_type == 'jobSeeker' %}
+        <div><strong>Email:</strong> {{ user.email }}</div>
+        <div><strong>Phone:</strong> {{ user.phone }}</div>
+        <div><strong>Gender:</strong> {{ user.gender }}</div>
+        <div><strong>Age:</strong> {{ user.age }}</div>
+      {% elif user_type == 'recruiter' %}
+        <div><strong>Email:</strong> {{ user.email }}</div>
+        <div><strong>Company:</strong> {{ user.company_name }}</div>
+        <div><strong>Address:</strong> {{ user.company_address }}</div>
+        <div><strong>Business PAN:</strong> {{ user.business_pancard }}</div>
+      {% endif %}
+    </div>
+    {% if user_type == 'jobSeeker' %}
+      <div style="margin-top:32px; color:#0073b1; font-weight:600;">Start searching for jobs and connect with recruiters!</div>
+    {% elif user_type == 'recruiter' %}
+      <div style="margin-top:32px; color:#0073b1; font-weight:600;">Post jobs and discover top talent for your company!</div>
+    {% endif %}
+  </div>
+</body>
+</html>

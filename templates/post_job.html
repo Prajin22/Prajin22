@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job - Zeus Jobs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='post_job.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">Zeus Jobs</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="post-job-container">
+        <div class="post-job-card">
+            <h1 class="page-title"><i class="fas fa-plus-circle"></i> Post a New Job</h1>
+            <p class="page-subtitle">Reach thousands of qualified candidates</p>
+            
+            <form method="POST" class="job-form">
+                <div class="form-section">
+                    <h3>Job Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Job Title *</label>
+                            <input type="text" id="title" name="title" required placeholder="e.g., Senior Software Developer">
+                        </div>
+                        <div class="form-group">
+                            <label for="company_name">Company Name *</label>
+                            <input type="text" id="company_name" name="company_name" required placeholder="e.g., TechCorp India">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" placeholder="e.g., Bangalore, Remote">
+                        </div>
+                        <div class="form-group">
+                            <label for="job_type">Job Type</label>
+                            <select id="job_type" name="job_type">
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Internship">Internship</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Salary Range (in ₹)</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="salary_min">Minimum Salary (₹)</label>
+                            <input type="number" id="salary_min" name="salary_min" placeholder="e.g., 500000">
+                        </div>
+                        <div class="form-group">
+                            <label for="salary_max">Maximum Salary (₹)</label>
+                            <input type="number" id="salary_max" name="salary_max" placeholder="e.g., 1500000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Job Description</h3>
+                    <div class="form-group">
+                        <label for="description">Job Description *</label>
+                        <textarea id="description" name="description" rows="6" required placeholder="Describe the role, responsibilities, and what you're looking for..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Requirements & Skills</h3>
+                    <div class="form-group">
+                        <label for="requirements">Requirements</label>
+                        <textarea id="requirements" name="requirements" rows="4" placeholder="List the requirements, qualifications, and experience needed..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="skills">Required Skills (comma-separated)</label>
+                        <input type="text" id="skills" name="skills" placeholder="e.g., Python, React, AWS, Machine Learning">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="history.back()">Cancel</button>
+                    <button type="submit" class="btn-primary">Post Job</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // GSAP animations
+        gsap.from(".post-job-card", {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            ease: "power2.out"
+        });
+
+        gsap.from(".form-section", {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            delay: 0.3,
+            ease: "power2.out"
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Job Recommendations - Zeus Jobs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='ai_recommendations.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">Zeus Jobs</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="ai-container">
+        <div class="ai-header">
+            <h1><i class="fas fa-robot"></i> AI-Powered Job Recommendations</h1>
+            <p>Personalized job matches based on your skills and preferences</p>
+        </div>
+
+        <!-- Skills & Preferences Form -->
+        <div class="preferences-card">
+            <h3><i class="fas fa-cog"></i> Customize Your Preferences</h3>
+            <form method="GET" class="preferences-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="skills">Your Skills (comma-separated)</label>
+                        <input type="text" id="skills" name="skills" value="{{ user_skills }}" 
+                               placeholder="e.g., Python, React, AWS, Machine Learning">
+                    </div>
+                    <div class="form-group">
+                        <label for="preferences">Preferences (location, job type, etc.)</label>
+                        <input type="text" id="preferences" name="preferences" value="{{ user_preferences }}"
+                               placeholder="e.g., Bangalore, Full-time, Remote">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Update Recommendations</button>
+            </form>
+        </div>
+
+        <!-- AI Recommendations -->
+        <div class="recommendations-section">
+            <h2><i class="fas fa-star"></i> Your Personalized Recommendations</h2>
+            
+            {% if recommendations %}
+                <div class="recommendations-grid">
+                    {% for rec in recommendations %}
+                    <div class="recommendation-card">
+                        <div class="match-score">
+                            <div class="score-circle">
+                                <span class="score-percentage">{{ "%.0f"|format(rec.score * 100) }}%</span>
+                                <span class="score-label">Match</span>
+                            </div>
+                        </div>
+                        
+                        <div class="job-info">
+                            <div class="job-header">
+                                <h4>{{ rec.job.title }}</h4>
+                                <p class="company">{{ rec.job.company_name }}</p>
+                                <p class="location"><i class="fas fa-map-marker-alt"></i> {{ rec.job.location or 'Remote' }}</p>
+                            </div>
+                            
+                            <div class="job-details">
+                                <p class="description">{{ rec.job.description[:120] }}{% if rec.job.description|length > 120 %}...{% endif %}</p>
+                                
+                                {% if rec.job.skills %}
+                                <div class="skills-section">
+                                    <h5>Required Skills:</h5>
+                                    <div class="skills-tags">
+                                        {% for skill in rec.job.skills.split(',')[:5] %}
+                                        <span class="skill-tag">{{ skill.strip() }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="salary-info">
+                                    {% if rec.job.salary_min and rec.job.salary_max %}
+                                    <span class="salary">₹{{ "{:,}".format(rec.job.salary_min) }} - ₹{{ "{:,}".format(rec.job.salary_max) }}</span>
+                                    {% elif rec.job.salary_min %}
+                                    <span class="salary">₹{{ "{:,}".format(rec.job.salary_min) }}+</span>
+                                    {% else %}
+                                    <span class="salary">Salary not specified</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="match-details">
+                                    <span class="skills-match">
+                                        <i class="fas fa-check-circle"></i> 
+                                        {{ rec.skills_match }} skills match
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="job-actions">
+                                <a href="{{ url_for('job_insights', job_id=rec.job.id) }}" class="btn-insights">
+                                    <i class="fas fa-chart-line"></i> AI Insights
+                                </a>
+                                <button class="btn-apply">Apply Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-recommendations">
+                    <i class="fas fa-search"></i>
+                    <h3>No recommendations found</h3>
+                    <p>Try updating your skills and preferences to get personalized job recommendations.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- AI Features Info -->
+        <div class="ai-features">
+            <h3><i class="fas fa-magic"></i> How Our AI Works</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-brain"></i>
+                    <h4>Skills Matching</h4>
+                    <p>AI analyzes your skills and matches them with job requirements</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h4>Location Preference</h4>
+                    <p>Considers your preferred locations and job types</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Market Analysis</h4>
+                    <p>Evaluates salary trends and market demand</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-star"></i>
+                    <h4>Personalized Scoring</h4>
+                    <p>Calculates match percentage based on multiple factors</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // GSAP animations
+        gsap.from(".ai-header", {
+            duration: 1,
+            y: -50,
+            opacity: 0,
+            ease: "power2.out"
+        });
+
+        gsap.from(".preferences-card", {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            delay: 0.2,
+            ease: "power2.out"
+        });
+
+        gsap.from(".recommendation-card", {
+            duration: 0.6,
+            y: 30,
+            opacity: 0,
+            stagger: 0.1,
+            delay: 0.4,
+            ease: "power2.out"
+        });
+
+        gsap.from(".feature-card", {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            stagger: 0.1,
+            delay: 0.6,
+            ease: "power2.out"
+        });
+    </script>
+</body>
+</html> 

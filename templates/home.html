@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Zeus Jobs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">Zeus Jobs</span>
+            </div>
+            <div class="nav-search">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search jobs, people, companies...">
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="nav-link"><i class="fas fa-search"></i> Jobs</a>
+                <a href="#" class="nav-link"><i class="fas fa-users"></i> Network</a>
+                <a href="#" class="nav-link"><i class="fas fa-bell"></i> Notifications</a>
+                <a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i> Profile</a>
+                <a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="home-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar-left">
+            <div class="sidebar-section">
+                <h3>Quick Actions</h3>
+                {% if user_type == 'jobSeeker' %}
+                    <a href="{{ url_for('ai_recommendations') }}" class="action-btn"><i class="fas fa-robot"></i> AI Recommendations</a>
+                    <a href="#" class="action-btn"><i class="fas fa-search"></i> Find Jobs</a>
+                    <a href="#" class="action-btn"><i class="fas fa-users"></i> Build Network</a>
+                    <a href="#" class="action-btn"><i class="fas fa-file-alt"></i> Update Resume</a>
+                {% else %}
+                    <a href="{{ url_for('post_job') }}" class="action-btn"><i class="fas fa-plus"></i> Post a Job</a>
+                    <a href="{{ url_for('salary_predictor') }}" class="action-btn"><i class="fas fa-chart-line"></i> Salary Predictor</a>
+                    <a href="{{ url_for('market_insights') }}" class="action-btn"><i class="fas fa-analytics"></i> Market Insights</a>
+                    <a href="#" class="action-btn"><i class="fas fa-search"></i> Find Candidates</a>
+                {% endif %}
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Recent Searches</h3>
+                <div class="search-item">
+                    <i class="fas fa-search"></i>
+                    <span>Software Developer</span>
+                </div>
+                <div class="search-item">
+                    <i class="fas fa-search"></i>
+                    <span>Remote Jobs</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Feed -->
+        <div class="main-feed">
+            <!-- Create Post Section -->
+            <div class="post-section">
+                <div class="post-input">
+                    <img src="https://via.placeholder.com/40/0073b1/ffffff?text={{ user.first_name[0] }}" alt="Avatar" class="post-avatar">
+                    <div class="post-input-content">
+                        <input type="text" placeholder="Share a job opportunity or update..." class="post-text">
+                        <div class="post-actions">
+                            <button class="post-action-btn"><i class="fas fa-image"></i> Photo</button>
+                            <button class="post-action-btn"><i class="fas fa-video"></i> Video</button>
+                            <button class="post-action-btn"><i class="fas fa-calendar"></i> Event</button>
+                            <button class="post-action-btn primary"><i class="fas fa-paper-plane"></i> Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Recommendations -->
+            <div class="feed-section">
+                <h3 class="section-title">
+                    {% if user_type == 'jobSeeker' %}
+                        <i class="fas fa-briefcase"></i> Recommended Jobs
+                    {% else %}
+                        <i class="fas fa-users"></i> Top Candidates
+                    {% endif %}
+                </h3>
+                
+                {% if user_type == 'jobSeeker' %}
+                    <!-- Job Cards for Job Seekers -->
+                    {% if jobs %}
+                        {% for job in jobs %}
+                        <div class="job-card">
+                            <div class="job-header">
+                                <div class="job-company">
+                                    <img src="https://via.placeholder.com/50/0073b1/ffffff?text={{ job.company_name[0] }}" alt="Company" class="company-logo">
+                                    <div>
+                                        <h4>{{ job.title }}</h4>
+                                        <p>{{ job.company_name }} • {{ job.location or 'Remote' }}</p>
+                                    </div>
+                                </div>
+                                <button class="save-btn" title="Save job"><i class="far fa-bookmark"></i></button>
+                            </div>
+                            <p class="job-description">{{ job.description[:150] }}{% if job.description|length > 150 %}...{% endif %}</p>
+                            {% if job.skills %}
+                            <div class="job-tags">
+                                {% for skill in job.skills.split(',')[:3] %}
+                                <span class="tag">{{ skill.strip() }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="job-footer">
+                                {% if job.salary_min and job.salary_max %}
+                                <span class="job-salary">₹{{ "{:,}".format(job.salary_min) }} - ₹{{ "{:,}".format(job.salary_max) }}</span>
+                                {% elif job.salary_min %}
+                                <span class="job-salary">₹{{ "{:,}".format(job.salary_min) }}+</span>
+                                {% else %}
+                                <span class="job-salary">Salary not specified</span>
+                                {% endif %}
+                                <button class="apply-btn">Apply Now</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-jobs">
+                            <p>No jobs posted yet. Check back later!</p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <!-- Candidate Cards for Recruiters -->
+                    <div class="candidate-card">
+                        <div class="candidate-header">
+                            <img src="https://via.placeholder.com/60/0073b1/ffffff?text=JS" alt="Candidate" class="candidate-avatar">
+                            <div>
+                                <h4>John Smith</h4>
+                                <p>Senior Developer • 5 years experience</p>
+                                <div class="candidate-skills">
+                                    <span class="skill-tag">Python</span>
+                                    <span class="skill-tag">React</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="candidate-description">Experienced developer with strong background in web development...</p>
+                        <div class="candidate-actions">
+                            <button class="contact-btn" title="Contact candidate"><i class="fas fa-envelope"></i> Contact</button>
+                            <button class="view-btn" title="View profile"><i class="fas fa-eye"></i> View Profile</button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Network Updates -->
+            <div class="feed-section">
+                <h3 class="section-title"><i class="fas fa-users"></i> Network Updates</h3>
+                <div class="update-card">
+                    <img src="https://via.placeholder.com/40/0073b1/ffffff?text=A" alt="User" class="update-avatar">
+                    <div class="update-content">
+                        <p><strong>Alice Johnson</strong> started a new position as <strong>Senior Developer</strong> at <strong>TechCorp</strong></p>
+                        <span class="update-time">2 hours ago</span>
+                    </div>
+                </div>
+                <div class="update-card">
+                    <img src="https://via.placeholder.com/40/00c6ff/ffffff?text=B" alt="User" class="update-avatar">
+                    <div class="update-content">
+                        <p><strong>Bob Wilson</strong> shared an article about <strong>AI in Recruitment</strong></p>
+                        <span class="update-time">4 hours ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="sidebar-right">
+            <div class="sidebar-section">
+                <h3>Who's Hiring</h3>
+                <div class="company-item">
+                    <img src="https://via.placeholder.com/40/0073b1/ffffff?text=G" alt="Google" class="company-avatar">
+                    <div>
+                        <h4>Google</h4>
+                        <p>15 open positions</p>
+                    </div>
+                </div>
+                <div class="company-item">
+                    <img src="https://via.placeholder.com/40/00c6ff/ffffff?text=M" alt="Microsoft" class="company-avatar">
+                    <div>
+                        <h4>Microsoft</h4>
+                        <p>8 open positions</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Trending Skills</h3>
+                <div class="skill-trend">
+                    <span class="skill-name">Python</span>
+                    <span class="trend-up">+15%</span>
+                </div>
+                <div class="skill-trend">
+                    <span class="skill-name">React</span>
+                    <span class="trend-up">+12%</span>
+                </div>
+                <div class="skill-trend">
+                    <span class="skill-name">AI/ML</span>
+                    <span class="trend-up">+25%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // GSAP animations for feed elements
+        gsap.from(".job-card, .candidate-card", {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power2.out"
+        });
+
+        gsap.from(".update-card", {
+            duration: 0.6,
+            x: -30,
+            opacity: 0,
+            stagger: 0.1,
+            delay: 0.5,
+            ease: "power2.out"
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <title>Job Seeker Login</title>
+</head>
+<body>
+    <!-- Custom cursor -->
+    <div class="custom-cursor"></div>
+    
+    <!-- Floating animation elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
+    <div class="background">
+        <div class="container">
+            <h1 class="animated-title">Job Seeker Login</h1>
+            <form id="loginForm" method="POST" action="/jobseeker-login">
+                <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+                <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+                <button type="submit" class="animated-submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="{{ url_for('select_signup') }}">Sign Up</a></p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
+</body>
+</html> 

@@ -1,0 +1,375 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #0073b1, #00c6ff);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    cursor: none; /* Hide default cursor for better interaction */
+}
+
+/* Custom cursor */
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease;
+}
+
+.custom-cursor.hover {
+    transform: scale(2);
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Floating Animation Elements */
+.floating-element {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 0;
+}
+
+.floating-element:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation: float1 8s ease-in-out infinite;
+}
+
+.floating-element:nth-child(2) {
+    width: 60px;
+    height: 60px;
+    top: 60%;
+    right: 15%;
+    animation: float2 6s ease-in-out infinite;
+}
+
+.floating-element:nth-child(3) {
+    width: 100px;
+    height: 100px;
+    bottom: 20%;
+    left: 20%;
+    animation: float3 10s ease-in-out infinite;
+}
+
+.floating-element:nth-child(4) {
+    width: 40px;
+    height: 40px;
+    top: 30%;
+    right: 30%;
+    animation: float4 7s ease-in-out infinite;
+}
+
+.floating-element:nth-child(5) {
+    width: 70px;
+    height: 70px;
+    bottom: 40%;
+    right: 10%;
+    animation: float5 9s ease-in-out infinite;
+}
+
+/* Floating Animations */
+@keyframes float1 {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+@keyframes float2 {
+    0%, 100% { transform: translateX(0px) scale(1); }
+    50% { transform: translateX(15px) scale(1.1); }
+}
+
+@keyframes float3 {
+    0%, 100% { transform: translateY(0px) translateX(0px); }
+    50% { transform: translateY(-15px) translateX(10px); }
+}
+
+@keyframes float4 {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(90deg) scale(0.8); }
+}
+
+@keyframes float5 {
+    0%, 100% { transform: translateX(0px) rotate(0deg); }
+    50% { transform: translateX(-20px) rotate(90deg); }
+}
+
+/* Interactive hover effects */
+.floating-element:hover {
+    transform: scale(1.2) !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Main Container */
+.container {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+    overflow-y: auto;
+    max-height: 90vh;
+    z-index: 10;
+    position: relative;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Header Styling */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #0073b1;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    0% { text-shadow: 2px 2px 5px rgba(0, 115, 177, 0.5); }
+    100% { text-shadow: 2px 2px 15px rgba(0, 115, 177, 0.8); }
+}
+
+/* Input Fields, Textareas, Select, and Buttons */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc !important;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    background-color: #fff !important;
+    color: #333 !important;
+    display: block;
+    outline: none;
+}
+
+input[type="password"] {
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+    opacity: 1 !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    font-size: 1rem;
+    font-weight: 500;
+    outline: none !important;
+    filter: none !important;
+    pointer-events: auto !important;
+    z-index: 2;
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+input[type="password"]:disabled,
+input[type="password"][readonly] {
+    opacity: 1 !important;
+    background: #fff !important;
+    color: #111 !important;
+    border: 1px solid #ccc !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #0073b1 !important;
+    box-shadow: 0 4px 10px rgba(0, 115, 177, 0.3);
+    transform: scale(1.02);
+    background-color: #fff !important;
+    color: #333 !important;
+}
+
+input[type="password"]:focus {
+    background-color: #fff !important;
+    color: #333 !important;
+}
+
+textarea {
+    resize: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #0073b1, #00c6ff) !important;
+    color: #fff !important;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: block;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 115, 177, 0.2);
+    margin-top: 20px;
+}
+
+button:focus {
+    outline: 2px solid #0073b1;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #00c6ff, #0073b1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 115, 177, 0.5);
+}
+
+a {
+    color: #0073b1;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #00c6ff;
+    text-shadow: 0 0 5px rgba(0, 198, 255, 0.5);
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+fieldset:hover {
+    box-shadow: 0 4px 10px rgba(0, 115, 177, 0.2);
+    transform: translateY(-2px);
+}
+
+legend {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #555;
+    padding: 0 10px;
+}
+
+.role-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.role-button {
+    padding: 15px;
+    font-size: 1rem;
+    background-color: #0073b1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.role-button:hover {
+    background-color: #005f8d;
+    transform: scale(1.05);
+}
+
+.animated-title {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.animated-submit {
+    opacity: 1 !important;
+    background: linear-gradient(45deg, #0073b1, #00c6ff) !important;
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 115, 177, 0.2);
+}
+
+.hidden {
+    display: none;
+}
+
+.locked {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.verify-btn {
+    padding: 10px;
+    background-color: #0073b1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.verify-btn:hover {
+    background-color: #005f8d;
+}
+
+#verificationStatus {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+@media (max-width: 400px) {
+    .container {
+        width: 90%;
+    }
+    
+    .floating-element {
+        display: none; /* Hide on mobile for better performance */
+    }
+}
