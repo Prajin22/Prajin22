@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from ai_ml_engine import ai_ml_engine
 from encryption_utils import encrypt_field, decrypt_field, encrypt_user_sensitive_data, decrypt_user_sensitive_data
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -15,6 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///jobportal.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Job Seeker Model
 class JobSeeker(db.Model):
@@ -26,7 +28,10 @@ class JobSeeker(db.Model):
     gender = db.Column(db.String(500), nullable=False)  # Encrypted gender
     age = db.Column(db.String(500), nullable=False)  # Encrypted age
     password = db.Column(db.String(200), nullable=False)
-    # Add more fields as needed
+    profile_picture = db.Column(db.String(300))  # Path to profile picture
+    bio = db.Column(db.Text)  # About section
+    experiences = db.relationship('Experience', backref='jobseeker', lazy=True)
+    skills = db.relationship('Skill', backref='jobseeker', lazy=True)
 
 # Recruiter Model
 class Recruiter(db.Model):
@@ -38,7 +43,29 @@ class Recruiter(db.Model):
     company_name = db.Column(db.String(120))
     company_address = db.Column(db.String(500))  # Encrypted company address
     password = db.Column(db.String(200), nullable=False)
-    # Add more fields as needed
+    profile_picture = db.Column(db.String(300))  # Path to profile picture
+    bio = db.Column(db.Text)  # About section
+    experiences = db.relationship('Experience', backref='recruiter', lazy=True)
+    skills = db.relationship('Skill', backref='recruiter', lazy=True)
+
+# Experience Model
+class Experience(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    company = db.Column(db.String(200), nullable=False)
+    start_year = db.Column(db.String(10))
+    end_year = db.Column(db.String(10))
+    description = db.Column(db.Text)
+    jobseeker_id = db.Column(db.Integer, db.ForeignKey('job_seeker.id'))
+    recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id'))
+
+# Skill Model
+class Skill(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    endorsements = db.Column(db.Integer, default=0)
+    jobseeker_id = db.Column(db.Integer, db.ForeignKey('job_seeker.id'))
+    recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id'))
 
 # Job Posting Model
 class Job(db.Model):
@@ -307,36 +334,55 @@ def recruiter_login():
             session['user_type'] = 'recruiter'
             flash("Logged in successfully!", "success")
             return redirect(url_for('profile'))
-        print(f"[DEBUG] Recruiter password check failed. User password hash: {user.password[:20]}...")
+        if user:
+            print(f"[DEBUG] Recruiter password check failed. User password hash: {user.password[:20]}...")
+        else:
+            print(f"[DEBUG] Recruiter not found for email: {email}")
         flash("Invalid email or password.", "error")
     return render_template('recruiter-login.html')
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'user' not in session or 'user_type' not in session:
         return redirect(url_for('login'))
     
     user_email = session['user']
     user_type = session['user_type']
-    
+    user_info = None
     if user_type == 'jobSeeker':
         user_info = JobSeeker.query.filter_by(email=user_email).first()
-        # Decrypt sensitive data for display
+        if request.method == 'POST' and user_info:
+            user_info.first_name = request.form.get('first_name', user_info.first_name)
+            user_info.last_name = request.form.get('last_name', user_info.last_name)
+            user_info.phone = encrypt_field(request.form.get('phone', decrypt_field(user_info.phone)))
+            user_info.gender = encrypt_field(request.form.get('gender', decrypt_field(user_info.gender)))
+            user_info.age = encrypt_field(request.form.get('age', decrypt_field(user_info.age)))
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+            return redirect(url_for('profile'))
+        # Decrypt for display
         if user_info:
             user_info.phone = decrypt_field(user_info.phone)
             user_info.gender = decrypt_field(user_info.gender)
             user_info.age = decrypt_field(user_info.age)
     elif user_type == 'recruiter':
         user_info = Recruiter.query.filter_by(email=user_email).first()
-        # Decrypt sensitive data for display
+        if request.method == 'POST' and user_info:
+            user_info.first_name = request.form.get('first_name', user_info.first_name)
+            user_info.last_name = request.form.get('last_name', user_info.last_name)
+            user_info.company_name = request.form.get('company_name', user_info.company_name)
+            user_info.business_pancard = encrypt_field(request.form.get('business_pancard', decrypt_field(user_info.business_pancard)))
+            user_info.company_address = encrypt_field(request.form.get('company_address', decrypt_field(user_info.company_address)))
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+            return redirect(url_for('profile'))
+        # Decrypt for display
         if user_info:
             user_info.business_pancard = decrypt_field(user_info.business_pancard)
             user_info.company_address = decrypt_field(user_info.company_address)
-    
     if not user_info:
-        flash("User not found.", "error")
+        flash('User not found.', 'error')
         return redirect(url_for('home'))
-    
     return render_template('profile.html', user=user_info, user_type=user_type)
 
 @app.route('/post-job', methods=['GET', 'POST'])
